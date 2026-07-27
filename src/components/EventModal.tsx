@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { X, Calendar, MapPin, Star, Info, Image as ImageIcon } from "lucide-react";
+<<<<<<< HEAD
 import { db, doc, setDoc, addDoc, collection } from "../auth";
+=======
+import { db } from "../firebase";
+import { doc, setDoc, addDoc, collection } from "firebase/firestore";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import { toast } from "react-hot-toast";
 import { handleFirestoreError, OperationType } from "../lib/firestore-error-handler";
 

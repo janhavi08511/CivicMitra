@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap');
 @import "tailwindcss";
+=======
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap');
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;

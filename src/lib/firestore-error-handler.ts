@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { auth } from "../auth";
+=======
+import { auth } from "../firebase";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 
 export enum OperationType {
   CREATE = 'create',
@@ -33,7 +37,11 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
   
   // Special handling for the "client is offline" error which is usually a config issue
   if (errorMessage.includes('the client is offline')) {
+<<<<<<< HEAD
     const configError = "The local data backend is unavailable. Please verify the API server and MongoDB connection.";
+=======
+    const configError = "Firestore connection failed (client is offline). This is likely due to an incorrect Firebase configuration (Project ID, API Key, or Database ID). Please verify your environment variables and firebase-applet-config.json.";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
     console.error(configError);
     throw new Error(JSON.stringify({
       error: configError,

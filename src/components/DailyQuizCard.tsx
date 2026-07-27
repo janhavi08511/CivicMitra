@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
+<<<<<<< HEAD
 import { collection, query, where, getDocs, limit, db } from "../auth";
+=======
+import { collection, query, where, getDocs, limit } from "firebase/firestore";
+import { db } from "../firebase";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import { useAuth } from "../contexts/AuthContext";
 import { motion } from "motion/react";
 import { Brain, CheckCircle2, Trophy, ArrowRight, Loader2 } from "lucide-react";

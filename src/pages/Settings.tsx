@@ -3,7 +3,12 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import { motion } from "motion/react";
 import { Bell, Shield, User, Moon, Globe, Trash2 } from "lucide-react";
 import { cn } from "../lib/utils";
+<<<<<<< HEAD
 import { auth, db, doc, getDoc } from "../auth";
+=======
+import { auth, db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import { UserProfile } from "../types";
 import { handleFirestoreError, OperationType } from "../lib/firestore-error-handler";
 import { useTheme } from "../contexts/ThemeContext";

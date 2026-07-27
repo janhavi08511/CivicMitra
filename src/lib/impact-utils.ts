@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 import { calculateImpact, ImpactInput } from "./impact-engine";
 import { ImpactOutput } from "./impact-engine/types";
 
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 export const CO2_PER_POINT = 0.05;
 export const ELECTRICITY_PER_POINT = 1.5;
 export const WATER_PER_POINT = 2.0;
@@ -27,6 +30,7 @@ export const formatWater = (litres: number): string =>
   litres >= 1000 ? `${(litres / 1000).toFixed(2)} kL` : `${litres.toFixed(1)} L`;
 
 export const formatWaste = (kg: number): string => `${kg.toFixed(2)} kg`;
+<<<<<<< HEAD
 
 /**
  * NEW FUNCTIONS - Activity-based impact calculations using scientific engine
@@ -102,3 +106,5 @@ export function aggregateImpacts(impacts: ImpactOutput[]): ImpactOutput {
     }
   );
 }
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f

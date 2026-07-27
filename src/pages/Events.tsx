@@ -1,5 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
+<<<<<<< HEAD
 import { api } from "../lib/api";
+=======
+import { collection, getDocs, query, orderBy, deleteDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
+import { handleFirestoreError, OperationType } from "../lib/firestore-error-handler";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import DashboardLayout from "../layouts/DashboardLayout";
 import { motion, AnimatePresence } from "motion/react";
 import { Calendar, MapPin, Users, ArrowRight, Star, Plus, Edit2, Trash2, CheckCircle2, Camera, Trophy as TrophyIcon, Loader2, Database } from "lucide-react";
@@ -27,8 +33,16 @@ export default function Events() {
 
   const fetchEvents = useCallback(async () => {
     try {
+<<<<<<< HEAD
       const data = await api.getEvents();
       setEvents(data.map((event: any) => ({ id: event._id || event.eventId, ...event })));
+=======
+      const q = query(collection(db, "events"), orderBy("startDate", "asc"));
+      const snap = await getDocs(q).catch(e => handleFirestoreError(e, OperationType.LIST, "events"));
+      if (snap) {
+        setEvents(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      }
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
     } catch (error) {
       console.error("Error fetching events:", error);
     } finally {
@@ -162,6 +176,19 @@ export default function Events() {
         },
       ];
 
+<<<<<<< HEAD
+=======
+      const { writeBatch } = await import("firebase/firestore");
+      const batch = writeBatch(db);
+      eventsData.forEach(e => {
+        const ref = doc(db, "events", e.eventId);
+        batch.set(ref, {
+          ...e,
+          createdAt: new Date().toISOString()
+        });
+      });
+      await batch.commit();
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       toast.success("Events updated successfully!");
       fetchEvents();
     } catch (error) {
@@ -183,6 +210,10 @@ export default function Events() {
 
   const handleDelete = async (eventId: string) => {
     try {
+<<<<<<< HEAD
+=======
+      await deleteDoc(doc(db, "events", eventId)).catch(e => handleFirestoreError(e, OperationType.DELETE, `events/${eventId}`));
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       toast.success("Event deleted successfully!");
       fetchEvents();
     } catch (error) {

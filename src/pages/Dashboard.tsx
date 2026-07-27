@@ -1,5 +1,10 @@
 import { useEffect, useState, useMemo, memo } from "react";
+<<<<<<< HEAD
 import { collection, query, getDocs, limit, orderBy, where, doc, getDoc, setDoc, writeBatch, onSnapshot, db, auth } from "../auth";
+=======
+import { collection, query, getDocs, limit, orderBy, where, doc, getDoc, setDoc, writeBatch, onSnapshot } from "firebase/firestore";
+import { db, auth } from "../firebase";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import { Category, Difficulty, Challenge, UserProfile, Completion, VerificationStatus, Role } from "../types";
 import { toast } from "react-hot-toast";
 import { handleFirestoreError, OperationType } from "../lib/firestore-error-handler";
@@ -19,9 +24,14 @@ import { useBadges } from "../hooks/useBadges";
 import { cn } from "../lib/utils";
 import { useEventData } from "../lib/event-registration-utils";
 import { getCurrentLevel, LEVELS } from "../lib/level-utils";
+<<<<<<< HEAD
 import { calculateCO2, calculateElectricity, calculateWater, calculateWaste, formatCO2, formatElectricity, formatWater, formatWaste, aggregateImpacts, migratePointsToActivityImpact } from "../lib/impact-utils";
 import ImpactCard from "../components/ImpactCard";
 import { ImpactService } from "../services/impactService";
+=======
+import { calculateCO2, calculateElectricity, calculateWater, calculateWaste, formatCO2, formatElectricity, formatWater, formatWaste } from "../lib/impact-utils";
+import ImpactCard from "../components/ImpactCard";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 
 export default function Dashboard() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -107,6 +117,7 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+<<<<<<< HEAD
     // Calculate impact from points (legacy)
     const pointsImpact = migratePointsToActivityImpact(totalPoints);
     
@@ -125,6 +136,13 @@ export default function Dashboard() {
     animateValue(displayWater, totalImpact.water_litre_saved, setDisplayWater);
     animateValue(displayWaste, totalImpact.waste_kg_prevented, setDisplayWaste);
   }, [totalPoints, recentActivity]);
+=======
+    animateValue(displayCO2, calculateCO2(totalPoints), setDisplayCO2);
+    animateValue(displayElectricity, calculateElectricity(totalPoints), setDisplayElectricity);
+    animateValue(displayWater, calculateWater(totalPoints), setDisplayWater);
+    animateValue(displayWaste, calculateWaste(totalPoints), setDisplayWaste);
+  }, [totalPoints]);
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 
   const welcomeMessage = useMemo(() => {
     const name = profile?.fullName?.split(' ')[0] || profile?.username || 'Eco-Warrior';

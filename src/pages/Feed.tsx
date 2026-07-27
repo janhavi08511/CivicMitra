@@ -1,5 +1,10 @@
 import { useEffect, useState, useCallback, memo, useRef } from "react";
+<<<<<<< HEAD
 import { collection, query, orderBy, limit, onSnapshot, doc, getDoc, addDoc, updateDoc, increment, setDoc, deleteDoc, db, auth } from "../auth";
+=======
+import { collection, query, orderBy, limit, onSnapshot, doc, getDoc, addDoc, updateDoc, increment, setDoc, deleteDoc } from "firebase/firestore";
+import { db, auth } from "../firebase";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import { handleFirestoreError, OperationType } from "../lib/firestore-error-handler";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { Completion } from "../types";

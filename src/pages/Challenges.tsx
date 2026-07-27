@@ -1,5 +1,12 @@
 import { useEffect, useState, useMemo } from "react";
+<<<<<<< HEAD
 import { auth, onAuthStateChanged } from "../auth";
+=======
+import { collection, getDocs, writeBatch, doc, getDoc } from "firebase/firestore";
+import { db, auth } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { handleFirestoreError, OperationType } from "../lib/firestore-error-handler";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import DashboardLayout from "../layouts/DashboardLayout";
 import { Challenge, Category, Difficulty, Role } from "../types";
 import { AnimatePresence } from "motion/react";
@@ -7,7 +14,10 @@ import { Search, Database, Plus, AlertTriangle } from "lucide-react";
 import ChallengeCard from "../components/ChallengeCard";
 import ChallengeModal from "../components/ChallengeModal";
 import { toast } from "react-hot-toast";
+<<<<<<< HEAD
 import { api } from "../lib/api";
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 
 export default function Challenges() {
   const [challenges, setChallenges] = useState<Challenge[]>([]);
@@ -31,7 +41,12 @@ export default function Challenges() {
       }
 
       try {
+<<<<<<< HEAD
         if (user.email === "arcadeabhi6@gmail.com") {
+=======
+        const userSnap = await getDoc(doc(db, "users", user.uid)).catch(e => handleFirestoreError(e, OperationType.GET, `users/${user.uid}`));
+        if (userSnap && userSnap.exists() && userSnap.data().role === Role.ADMIN) {
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
           setIsAdmin(true);
         }
       } catch (error) {
@@ -44,8 +59,16 @@ export default function Challenges() {
 
   const fetchChallenges = async () => {
     try {
+<<<<<<< HEAD
       const data = await api.getChallenges();
       setChallenges(data as Challenge[]);
+=======
+      const snap = await getDocs(collection(db, "challenges")).catch(e => handleFirestoreError(e, OperationType.LIST, "challenges"));
+      if (snap) {
+        const data = snap.docs.map(d => d.data() as Challenge);
+        setChallenges(data);
+      }
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
     } catch (error) {
       console.error("Error fetching challenges:", error);
     } finally {
@@ -191,6 +214,15 @@ export default function Challenges() {
         { challengeId: "adopt-a-tree", title: "Adopt a Tree", description: "Choose a specific tree near your home or locality to water and care for regularly — document Day 1 of adoption.", shortDescription: "Adopt a nearby tree — water it and document Day 1.", category: Category.NATURE, difficulty: Difficulty.MEDIUM, points: 25, bonusPointsStreak: 5, iconEmoji: "🌳", bannerImageUrl: "https://picsum.photos/seed/adopttree/800/400", proofInstructions: "Upload a photo of you with your adopted tree with its location noted.", isDaily: false, isActive: true },
       ];
 
+<<<<<<< HEAD
+=======
+      const batch = writeBatch(db);
+      challengesData.forEach(c => {
+        const ref = doc(db, "challenges", c.challengeId);
+        batch.set(ref, c);
+      });
+      await batch.commit();
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       toast.success("Challenges seeded successfully!");
       fetchChallenges();
     } catch (error) {

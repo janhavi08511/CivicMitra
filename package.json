@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
+<<<<<<< HEAD
     "dev:server": "tsx server.ts",
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
@@ -15,7 +18,10 @@
     "@google/genai": "^1.46.0",
     "@tailwindcss/vite": "^4.1.14",
     "@tanstack/react-query": "^5.95.2",
+<<<<<<< HEAD
     "@types/jsonwebtoken": "^9.0.10",
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
     "@vitejs/plugin-react": "^5.0.4",
     "axios": "^1.13.6",
     "canvas-confetti": "^1.9.4",
@@ -24,9 +30,14 @@
     "dayjs": "^1.11.20",
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
+<<<<<<< HEAD
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.546.0",
     "mongoose": "^8.6.0",
+=======
+    "firebase": "^11.4.0",
+    "lucide-react": "^0.546.0",
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
     "motion": "^12.38.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

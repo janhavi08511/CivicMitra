@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 import { collection, doc, writeBatch, setDoc, db } from "./auth";
+=======
+import { collection, doc, writeBatch, setDoc } from "firebase/firestore";
+import { db } from "./firebase";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import { Category, Difficulty, Role } from "./types";
 
 const challenges = [

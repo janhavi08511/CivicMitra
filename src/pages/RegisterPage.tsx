@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import { createUserWithEmailAndPassword, doc, setDoc, auth, db } from "../auth";
+=======
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import { signInWithGoogle } from "../lib/auth-utils";
 import { handleFirestoreError, OperationType } from "../lib/firestore-error-handler";
 import { syncUserToAllUsers, setCurrentSocialUser } from "../lib/social-utils";
@@ -57,7 +63,11 @@ export default function RegisterPage() {
       console.error("Registration Error:", error);
       let message = "Failed to register";
       if (error.code === 'auth/operation-not-allowed') {
+<<<<<<< HEAD
         message = "Email/password sign-in is currently unavailable. Please try again shortly.";
+=======
+        message = "Email/Password sign-in is not enabled in your Firebase Console. Please enable it in Authentication > Sign-in method.";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       } else {
         message = error.message || message;
       }
@@ -82,9 +92,15 @@ export default function RegisterPage() {
       } else if (error.code === 'auth/popup-closed-by-user') {
         message = "Sign-in popup closed before completion.";
       } else if (error.code === 'auth/unauthorized-domain') {
+<<<<<<< HEAD
         message = "This domain is not authorized for Google sign-in. Please use email/password authentication instead.";
       } else if (error.code === 'auth/operation-not-allowed') {
         message = "Google sign-in is not available in this build. Please use email/password authentication instead.";
+=======
+        message = "This domain is not authorized for Google Sign-In. Please check Firebase Console.";
+      } else if (error.code === 'auth/operation-not-allowed') {
+        message = "Google Sign-In is not enabled in your Firebase Console. Please enable it in Authentication > Sign-in method.";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       } else {
         try {
           const parsed = JSON.parse(error.message);

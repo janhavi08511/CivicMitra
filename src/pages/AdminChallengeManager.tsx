@@ -1,11 +1,21 @@
 import { useState, useEffect } from "react";
+<<<<<<< HEAD
 import { Challenge, Category, Difficulty } from "../types";
+=======
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, getDoc, setDoc } from "firebase/firestore";
+import { db, auth } from "../firebase";
+import { Challenge, Category, Difficulty, Role } from "../types";
+import { handleFirestoreError, OperationType } from "../lib/firestore-error-handler";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import DashboardLayout from "../layouts/DashboardLayout";
 import { Plus, Trash2, Edit2, Save, X, RefreshCw, ShieldCheck, Trophy, Image as ImageIcon, HelpCircle } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { cn } from "../lib/utils";
 import ConfirmModal from "../components/ConfirmModal";
+<<<<<<< HEAD
 import { api } from "../lib/api";
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 
 export default function AdminChallengeManager() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -33,8 +43,15 @@ export default function AdminChallengeManager() {
 
   const fetchChallenges = async () => {
     try {
+<<<<<<< HEAD
       const data = await api.getAdminChallenges();
       setChallenges(data as Challenge[]);
+=======
+      const snap = await getDocs(collection(db, "challenges")).catch(e => handleFirestoreError(e, OperationType.LIST, "challenges"));
+      if (snap) {
+        setChallenges(snap.docs.map(d => ({ ...d.data() } as Challenge)));
+      }
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
     } catch (error) {
       console.error("Error fetching challenges:", error);
     } finally {
@@ -43,8 +60,39 @@ export default function AdminChallengeManager() {
   };
 
   useEffect(() => {
+<<<<<<< HEAD
     setIsAdmin(true);
     fetchChallenges();
+=======
+    const checkAdmin = async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        setIsAdmin(false);
+        setLoading(false);
+        return;
+      }
+
+      if (user.email === "arcadeabhi6@gmail.com") {
+        setIsAdmin(true);
+        fetchChallenges();
+        return;
+      }
+
+      try {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists() && userDoc.data().role === Role.ADMIN) {
+          setIsAdmin(true);
+          fetchChallenges();
+        } else {
+          setLoading(false);
+        }
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+
+    checkAdmin();
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
   }, []);
 
   const handleSave = async () => {
@@ -54,11 +102,16 @@ export default function AdminChallengeManager() {
     }
 
     try {
+<<<<<<< HEAD
       if (editingId) {
         await api.updateChallenge(formData.challengeId, formData);
       } else {
         await api.createChallenge(formData);
       }
+=======
+      const ref = doc(db, "challenges", formData.challengeId);
+      await setDoc(ref, formData).catch(err => handleFirestoreError(err, OperationType.WRITE, `challenges/${formData.challengeId}`));
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 
       toast.success(editingId ? "Challenge updated" : "Challenge created");
       setEditingId(null);
@@ -72,7 +125,11 @@ export default function AdminChallengeManager() {
 
   const handleDelete = async (id: string) => {
     try {
+<<<<<<< HEAD
       await api.deleteChallenge(id);
+=======
+      await deleteDoc(doc(db, "challenges", id)).catch(e => handleFirestoreError(e, OperationType.DELETE, `challenges/${id}`));
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       toast.success("Challenge deleted");
       fetchChallenges();
     } catch (error) {

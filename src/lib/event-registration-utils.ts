@@ -1,5 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
+<<<<<<< HEAD
 import { db, auth } from '../auth';
+=======
+import { collection, query, where, onSnapshot, getDocs } from 'firebase/firestore';
+import { db, auth } from '../firebase';
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import { handleFirestoreError, OperationType } from './firestore-error-handler';
 
 export interface Registration {
@@ -46,6 +51,7 @@ export const useEventData = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+<<<<<<< HEAD
     const loadData = async () => {
       try {
         const [registrationsData, submissionsData, quizScoresData] = await Promise.all([
@@ -64,6 +70,50 @@ export const useEventData = () => {
     };
 
     void loadData();
+=======
+    // 1. Listen for public participants
+    const unsubParticipants = onSnapshot(
+      collection(db, "event_participants_public"),
+      (snap) => {
+        const regs = snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Registration));
+        setRegistrations(regs);
+      },
+      (error) => handleFirestoreError(error, OperationType.LIST, "event_participants_public")
+    );
+
+    // 2. Listen for completions (publicly visible)
+    const unsubCompletions = onSnapshot(
+      collection(db, "completions"),
+      (snap) => {
+        const subs = snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Submission));
+        setSubmissions(subs);
+      },
+      (error) => handleFirestoreError(error, OperationType.LIST, "completions")
+    );
+
+    // 3. Quiz scores (if needed, though quiz_attempts is used elsewhere)
+    const unsubQuiz = onSnapshot(
+      collection(db, "quiz_attempts"),
+      (snap) => {
+        const scores = snap.docs.map(doc => ({ 
+          id: doc.id, 
+          userEmail: doc.data().userId, // Note: using userId as email placeholder if needed
+          score: doc.data().score,
+          timestamp: doc.data().submittedAt
+        } as QuizScore));
+        setQuizScores(scores);
+      },
+      (error) => handleFirestoreError(error, OperationType.LIST, "quiz_attempts")
+    );
+
+    setLoading(false);
+
+    return () => {
+      unsubParticipants();
+      unsubCompletions();
+      unsubQuiz();
+    };
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
   }, []);
 
   const addRegistration = useCallback((reg: Registration) => {

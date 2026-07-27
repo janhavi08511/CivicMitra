@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import { signInWithEmailAndPassword, doc, getDoc, auth, db } from "../auth";
+=======
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import { signInWithGoogle } from "../lib/auth-utils";
 import { setCurrentSocialUser } from "../lib/social-utils";
 import { toast } from "react-hot-toast";
@@ -35,7 +41,11 @@ export default function LoginPage() {
       console.error("Login Error:", error);
       let message = "Failed to login";
       if (error.code === 'auth/operation-not-allowed') {
+<<<<<<< HEAD
         message = "Email/password sign-in is currently unavailable. Please try again shortly.";
+=======
+        message = "Email/Password sign-in is not enabled in your Firebase Console. Please enable it in Authentication > Sign-in method.";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       } else {
         message = error.message || message;
       }
@@ -55,15 +65,25 @@ export default function LoginPage() {
       console.error("Google Sign In Error:", error);
       let message = "Failed to sign in with Google";
       
+<<<<<<< HEAD
       // Handle authentication errors
+=======
+      // Handle Firebase Auth errors
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       if (error.code === 'auth/popup-blocked') {
         message = "Popup blocked by browser. Please allow popups for this site.";
       } else if (error.code === 'auth/popup-closed-by-user') {
         message = "Sign-in popup closed before completion.";
       } else if (error.code === 'auth/unauthorized-domain') {
+<<<<<<< HEAD
         message = "This domain is not authorized for Google sign-in. Please use email/password authentication instead.";
       } else if (error.code === 'auth/operation-not-allowed') {
         message = "Google sign-in is not available in this build. Please use email/password authentication instead.";
+=======
+        message = "This domain is not authorized for Google Sign-In. Please check Firebase Console.";
+      } else if (error.code === 'auth/operation-not-allowed') {
+        message = "Google Sign-In is not enabled in your Firebase Console. Please enable it in Authentication > Sign-in method.";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       } else {
         // Handle custom Firestore errors (JSON strings)
         try {

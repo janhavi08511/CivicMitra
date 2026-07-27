@@ -27,6 +27,7 @@ export enum VerificationStatus {
   MANUAL_REVIEW = "MANUAL_REVIEW",
 }
 
+<<<<<<< HEAD
 export enum ImpactType {
   TRANSPORT = "TRANSPORT",
   ELECTRICITY = "ELECTRICITY",
@@ -64,6 +65,8 @@ export interface ImpactData {
   };
 }
 
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 export interface QuizQuestion {
   id?: string;
   question: string;
@@ -116,7 +119,10 @@ export interface Challenge {
   proofInstructions: string;
   isDaily: boolean;
   isActive: boolean;
+<<<<<<< HEAD
   impactCalculation?: ImpactCalculation;
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 }
 
 export interface Completion {
@@ -134,10 +140,13 @@ export interface Completion {
   verifiedAt?: string;
   likesCount?: number;
   commentsCount?: number;
+<<<<<<< HEAD
   impactData?: ImpactData;
   fraudScore?: FraudScore;           // NEW - Fraud detection analysis
   fraudReviewStatus?: "pending" | "approved" | "rejected"; // NEW
   fraudReviewId?: string;            // NEW - Links to FraudReviewTask
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 }
 
 export interface Badge {
@@ -159,6 +168,7 @@ export interface Notification {
   createdAt: string;
   actionUrl?: string;
 }
+<<<<<<< HEAD
 
 // ============================================================================
 // PHASE 2: FRAUD DETECTION TYPES
@@ -268,3 +278,5 @@ export interface FraudReviewTask {
   imageUrl: string;
   challengeTitle: string;
 }
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f

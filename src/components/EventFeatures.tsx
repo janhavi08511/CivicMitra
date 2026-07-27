@@ -21,9 +21,16 @@ import {
 import { cn } from '../lib/utils';
 import { Registration, Submission, useEventData } from '../lib/event-registration-utils';
 import { formatDistanceToNow } from 'date-fns';
+<<<<<<< HEAD
 import { auth } from '../auth';
 import { toast } from 'react-hot-toast';
 import { api } from '../lib/api';
+=======
+import { db, auth } from '../firebase';
+import { collection, addDoc, updateDoc, doc, increment } from 'firebase/firestore';
+import { toast } from 'react-hot-toast';
+import { handleFirestoreError, OperationType } from '../lib/firestore-error-handler';
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 
 // --- Registration Modal ---
 
@@ -87,7 +94,18 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
         userId: auth.currentUser?.uid
       };
 
+<<<<<<< HEAD
       await api.registerEvent(registration);
+=======
+      // 1. Save to private registrations (contains PII)
+      await addDoc(collection(db, "event_registrations"), registration)
+        .catch(e => handleFirestoreError(e, OperationType.CREATE, "event_registrations"));
+
+      // 2. Save to public participants (NO PII - email and phone removed)
+      const { email, phone, ...publicData } = registration;
+      await addDoc(collection(db, "event_participants_public"), publicData)
+        .catch(e => handleFirestoreError(e, OperationType.CREATE, "event_participants_public"));
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 
       // Update badge stats
       updateStats({

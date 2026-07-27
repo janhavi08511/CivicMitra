@@ -1,11 +1,22 @@
 import { useState, useEffect } from "react";
+<<<<<<< HEAD
+=======
+import { collection, getDocs, addDoc, doc, updateDoc, increment, query, where, getDoc, limit } from "firebase/firestore";
+import { db } from "../firebase";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import { QuizQuestion, QuizAttempt } from "../types";
 import { useAuth } from "../contexts/AuthContext";
 import { motion, AnimatePresence } from "motion/react";
 import { X, CheckCircle2, AlertCircle, Trophy, ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "react-hot-toast";
+<<<<<<< HEAD
 import { updateStats } from "../lib/badge-utils";
 import { api } from "../lib/api";
+=======
+import { handleFirestoreError, OperationType } from "../lib/firestore-error-handler";
+
+import { updateStats } from "../lib/badge-utils";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 
 interface QuizModalProps {
   isOpen: boolean;
@@ -31,10 +42,17 @@ export default function QuizModal({ isOpen, onClose, onComplete }: QuizModalProp
   const fetchAndSetupQuiz = async () => {
     setLoading(true);
     try {
+<<<<<<< HEAD
       const questionsData = await api.getQuizQuestions();
       if (questionsData) {
         const allQuestions = (questionsData as any[])
           .map(d => ({ id: d._id || d.id, ...d } as QuizQuestion))
+=======
+      const snap = await getDocs(collection(db, "quiz_questions")).catch(e => handleFirestoreError(e, OperationType.LIST, "quiz_questions"));
+      if (snap) {
+        const allQuestions = snap.docs
+          .map(d => ({ id: d.id, ...d.data() } as QuizQuestion))
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
           .filter(q => q && q.question && q.options && q.difficulty);
         
         if (allQuestions.length === 0) {
@@ -105,6 +123,23 @@ export default function QuizModal({ isOpen, onClose, onComplete }: QuizModalProp
     const today = new Date().toISOString().split('T')[0];
     
     try {
+<<<<<<< HEAD
+=======
+      // Double check if user already attempted today before saving
+      const q = query(
+        collection(db, "quiz_attempts"),
+        where("userId", "==", user.uid),
+        where("date", "==", today),
+        limit(1)
+      );
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        toast.error("You have already completed today's quiz!");
+        onClose();
+        return;
+      }
+
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       const attempt: QuizAttempt = {
         userId: user.uid,
         date: today,
@@ -113,7 +148,19 @@ export default function QuizModal({ isOpen, onClose, onComplete }: QuizModalProp
         submittedAt: new Date().toISOString()
       };
 
+<<<<<<< HEAD
       await api.saveQuizAttempt({ ...attempt, userId: user.uid });
+=======
+      // 1. Save attempt
+      await addDoc(collection(db, "quiz_attempts"), attempt).catch(e => handleFirestoreError(e, OperationType.CREATE, "quiz_attempts"));
+      
+      // 2. Update user points
+      const userRef = doc(db, "users", user.uid);
+      await updateDoc(userRef, {
+        points: increment(score),
+        totalPoints: increment(score)
+      }).catch(e => handleFirestoreError(e, OperationType.UPDATE, `users/${user.uid}`));
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 
       // Update badge stats
       updateStats({

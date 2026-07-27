@@ -9,7 +9,21 @@ import {
   UserBadges, 
   updateStats 
 } from "../lib/badge-utils";
+<<<<<<< HEAD
 import { auth, db, onAuthStateChanged, doc, getDoc, collection, query, where, getDocs, getCountFromServer } from "../auth";
+=======
+import { auth, db } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { 
+  doc, 
+  getDoc, 
+  collection, 
+  query, 
+  where, 
+  getDocs,
+  getCountFromServer
+} from "firebase/firestore";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 
 export function useBadges() {
   const [stats, setStats] = useState<UserStats>(getStats());

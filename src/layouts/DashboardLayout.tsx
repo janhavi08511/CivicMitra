@@ -1,5 +1,10 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import { auth, signOut, onAuthStateChanged, getDoc, doc, db } from "../auth";
+=======
+import { auth } from "../firebase";
+import { signOut } from "firebase/auth";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import { 
   Home, 
   Zap, 
@@ -17,9 +22,17 @@ import {
   Star
 } from "lucide-react";
 import { useEffect, useState } from "react";
+<<<<<<< HEAD
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "../lib/utils";
 
+=======
+import { onAuthStateChanged } from "firebase/auth";
+import { motion, AnimatePresence } from "motion/react";
+import { cn } from "../lib/utils";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import { Role } from "../types";
 import { useEventData } from "../lib/event-registration-utils";
 import { getCurrentLevel } from "../lib/level-utils";
@@ -68,10 +81,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           const userData = userDoc.data();
           setFirestorePoints(userData.points || 0);
           setUserName(userData.fullName || userData.username || user.displayName);
+<<<<<<< HEAD
           if (userData.role === Role.ADMIN || user.email === "janhavi08511@gmail.com") {
             setIsAdmin(true);
           }
         } else if (user.email === "janhavi08511@gmail.com") {
+=======
+          if (userData.role === Role.ADMIN || user.email === "arcadeabhi6@gmail.com") {
+            setIsAdmin(true);
+          }
+        } else if (user.email === "arcadeabhi6@gmail.com") {
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
           setIsAdmin(true);
         }
       } catch (error) {

@@ -1,10 +1,20 @@
 import { useState, useEffect } from "react";
+<<<<<<< HEAD
 import { QuizQuestion } from "../types";
+=======
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, writeBatch, getDoc } from "firebase/firestore";
+import { db, auth } from "../firebase";
+import { QuizQuestion } from "../types";
+import { handleFirestoreError, OperationType } from "../lib/firestore-error-handler";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import DashboardLayout from "../layouts/DashboardLayout";
 import { Plus, Trash2, Edit2, Save, X, RefreshCw } from "lucide-react";
 import { toast } from "react-hot-toast";
 import ConfirmModal from "../components/ConfirmModal";
+<<<<<<< HEAD
 import { api } from "../lib/api";
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 
 const PRESEED_QUESTIONS: Omit<QuizQuestion, 'id'>[] = [
   {
@@ -244,8 +254,18 @@ export default function AdminQuizManager() {
 
   const fetchQuestions = async () => {
     try {
+<<<<<<< HEAD
       const data = await api.getAdminQuizQuestions();
       setQuestions((data as QuizQuestion[]).filter(q => q && q.question));
+=======
+      const snap = await getDocs(collection(db, "quiz_questions")).catch(e => handleFirestoreError(e, OperationType.LIST, "quiz_questions"));
+      if (snap) {
+        setQuestions(snap.docs
+          .map(d => ({ id: d.id, ...d.data() } as QuizQuestion))
+          .filter(q => q && q.question)
+        );
+      }
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
     } catch (error) {
       console.error("Error fetching questions:", error);
     } finally {
@@ -254,8 +274,39 @@ export default function AdminQuizManager() {
   };
 
   useEffect(() => {
+<<<<<<< HEAD
     setIsAdmin(true);
     fetchQuestions();
+=======
+    const checkAdmin = async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        setIsAdmin(false);
+        setLoading(false);
+        return;
+      }
+
+      if (user.email === "arcadeabhi6@gmail.com") {
+        setIsAdmin(true);
+        fetchQuestions();
+        return;
+      }
+
+      try {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists() && userDoc.data().role === "ADMIN") {
+          setIsAdmin(true);
+          fetchQuestions();
+        } else {
+          setLoading(false);
+        }
+      } catch (error) {
+        setLoading(false);
+      }
+    };
+
+    checkAdmin();
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
   }, []);
 
   const handleAddQuestion = async () => {
@@ -264,7 +315,11 @@ export default function AdminQuizManager() {
       return;
     }
     try {
+<<<<<<< HEAD
       await api.createQuizQuestion(newQuestion);
+=======
+      await addDoc(collection(db, "quiz_questions"), newQuestion).catch(e => handleFirestoreError(e, OperationType.CREATE, "quiz_questions"));
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       toast.success("Question added!");
       setNewQuestion({ question: "", options: ["", "", "", ""], correctAnswer: 0, difficulty: "easy" });
       fetchQuestions();
@@ -275,7 +330,11 @@ export default function AdminQuizManager() {
 
   const handleDelete = async (id: string) => {
     try {
+<<<<<<< HEAD
       await api.deleteQuizQuestion(id);
+=======
+      await deleteDoc(doc(db, "quiz_questions", id)).catch(e => handleFirestoreError(e, OperationType.DELETE, `quiz_questions/${id}`));
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       toast.success("Deleted");
       fetchQuestions();
     } catch (error) {
@@ -286,14 +345,40 @@ export default function AdminQuizManager() {
   };
 
   const handleSeed = async () => {
+<<<<<<< HEAD
     try {
       for (const question of PRESEED_QUESTIONS) {
         await api.createQuizQuestion(question);
       }
+=======
+    console.log("PRESEED_QUESTIONS:", PRESEED_QUESTIONS);
+    // Use a simpler check instead of window.confirm which might be blocked in iframe
+    const confirmSeed = true; // For now, let's bypass or use a better UI later
+    if (!confirmSeed) return;
+    
+    try {
+      const batch = writeBatch(db);
+      console.log("Starting batch creation...");
+      
+      PRESEED_QUESTIONS.forEach((q, index) => {
+        const newDoc = doc(collection(db, "quiz_questions"));
+        batch.set(newDoc, q);
+        console.log(`Added question ${index + 1} to batch`);
+      });
+      
+      console.log("Committing batch...");
+      await batch.commit();
+      console.log("Batch committed successfully!");
+      
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       toast.success("Seeded 20 questions!");
       await fetchQuestions();
     } catch (error: any) {
       console.error("Seeding failed with error:", error);
+<<<<<<< HEAD
+=======
+      handleFirestoreError(error, OperationType.WRITE, "quiz_questions (batch)");
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       toast.error("Seeding failed. Check console for details.");
     }
   };

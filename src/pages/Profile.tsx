@@ -1,10 +1,20 @@
 import { useEffect, useState } from "react";
+<<<<<<< HEAD
 import { doc, getDoc, collection, query, where, getDocs, orderBy, db, auth } from "../auth";
 import { handleFirestoreError, OperationType } from "../lib/firestore-error-handler";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { UserProfile, Completion, UserTrustScore } from "../types";
 import { motion, AnimatePresence } from "motion/react";
 import { Award, Grid, List, Flame, Star, Zap, MapPin, Calendar, Trophy, Leaf, Shield } from "lucide-react";
+=======
+import { doc, getDoc, collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import { db, auth } from "../firebase";
+import { handleFirestoreError, OperationType } from "../lib/firestore-error-handler";
+import DashboardLayout from "../layouts/DashboardLayout";
+import { UserProfile, Completion } from "../types";
+import { motion, AnimatePresence } from "motion/react";
+import { Award, Grid, List, Flame, Star, Zap, MapPin, Calendar, Trophy, Leaf } from "lucide-react";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import { cn } from "../lib/utils";
 import { useEventData } from "../lib/event-registration-utils";
 import { getCurrentLevel } from "../lib/level-utils";
@@ -15,12 +25,18 @@ import BadgeUnlockOverlay from "../components/BadgeUnlockOverlay";
 import { useBadges } from "../hooks/useBadges";
 import { calculateCO2, calculateElectricity, calculateWater, calculateWaste, formatCO2, formatElectricity, formatWater, formatWaste } from "../lib/impact-utils";
 import ImpactCard from "../components/ImpactCard";
+<<<<<<< HEAD
 import UserTrustBadge from "../components/UserTrustBadge";
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 
 export default function Profile() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [completions, setCompletions] = useState<Completion[]>([]);
+<<<<<<< HEAD
   const [trustScore, setTrustScore] = useState<UserTrustScore | null>(null);
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("ACTIVITY");
   const { submissions } = useEventData();
@@ -61,6 +77,7 @@ export default function Profile() {
           setCompletions(compSnap.docs.map(d => ({ id: d.id, ...d.data() } as Completion)));
         }
 
+<<<<<<< HEAD
         // Fetch trust score
         const trustDoc = await getDoc(doc(db, "userTrustScores", auth.currentUser.uid)).catch(e => handleFirestoreError(e, OperationType.GET, `userTrustScores/${auth.currentUser?.uid}`));
         if (trustDoc && trustDoc.exists()) {
@@ -82,6 +99,8 @@ export default function Profile() {
           });
         }
 
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       } catch (error) {
         console.error("Error fetching profile:", error);
       } finally {
@@ -185,6 +204,7 @@ export default function Profile() {
           </div>
         </div>
 
+<<<<<<< HEAD
         {/* Trust Score Section */}
         {trustScore && (
           <div>
@@ -196,6 +216,8 @@ export default function Profile() {
           </div>
         )}
 
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
         {/* Tabs */}
         <div className="space-y-6">
           <div className="flex border-b border-primary/10">

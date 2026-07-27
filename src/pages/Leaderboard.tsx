@@ -1,5 +1,10 @@
 import { useEffect, useState, useMemo, memo } from "react";
+<<<<<<< HEAD
 import { collection, query, orderBy, limit, onSnapshot, db, auth } from "../auth";
+=======
+import { collection, query, orderBy, limit, onSnapshot } from "firebase/firestore";
+import { db, auth } from "../firebase";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import DashboardLayout from "../layouts/DashboardLayout";
 import { UserProfile } from "../types";
 import { motion } from "motion/react";

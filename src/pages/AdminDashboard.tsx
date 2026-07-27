@@ -1,12 +1,23 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
+<<<<<<< HEAD
 import { UserProfile, Completion, VerificationStatus, Challenge, Category, Difficulty } from "../types";
+=======
+import { collection, query, getDocs, where, doc, updateDoc, getDoc, increment, writeBatch } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import { db, auth } from "../firebase";
+import { handleFirestoreError, OperationType } from "../lib/firestore-error-handler";
+import { UserProfile, Completion, VerificationStatus, Role, Challenge, Category, Difficulty } from "../types";
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 import { motion } from "motion/react";
 import { Users, Zap, AlertCircle, CheckCircle2, XCircle, ShieldCheck, Eye, Database, Plus, Brain, Trophy } from "lucide-react";
 import { cn } from "../lib/utils";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
+<<<<<<< HEAD
 import { api } from "../lib/api";
+=======
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
 
 export default function AdminDashboard() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -25,6 +36,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
+<<<<<<< HEAD
         const [overview, completions] = await Promise.all([
           api.getAdminOverview(),
           api.getAdminCompletions(),
@@ -52,6 +64,45 @@ export default function AdminDashboard() {
         });
         setChallengesMap(cMap);
         setIsAdmin(true);
+=======
+        // Fetch Pending Completions
+        const q = query(collection(db, "completions"), where("aiVerificationStatus", "in", [VerificationStatus.PENDING, VerificationStatus.MANUAL_REVIEW]));
+        const snap = await getDocs(q).catch(e => handleFirestoreError(e, OperationType.LIST, "completions"));
+        if (snap) {
+          const comps = snap.docs.map(d => ({ id: d.id, ...d.data() } as Completion));
+          setPendingCompletions(comps);
+
+          // Fetch related users and challenges
+          const userIds = Array.from(new Set(comps.map(c => c.userId)));
+          const challengeIds = Array.from(new Set(comps.map(c => c.challengeId)));
+
+          const uMap: Record<string, any> = {};
+          for (const uid of userIds) {
+            const uDoc = await getDoc(doc(db, "users", uid));
+            if (uDoc.exists()) uMap[uid] = uDoc.data();
+          }
+          setUsersMap(uMap);
+
+          const cMap: Record<string, Challenge> = {};
+          const cSnap = await getDocs(collection(db, "challenges"));
+          cSnap.docs.forEach(d => {
+            const c = d.data() as Challenge;
+            cMap[c.challengeId] = c;
+          });
+          setChallengesMap(cMap);
+        }
+
+        const usersSnap = await getDocs(collection(db, "users")).catch(e => handleFirestoreError(e, OperationType.LIST, "users"));
+        const compsSnap = await getDocs(collection(db, "completions")).catch(e => handleFirestoreError(e, OperationType.LIST, "completions"));
+
+        if (usersSnap && compsSnap && snap) {
+          setStats({
+            totalUsers: usersSnap.size,
+            totalCompletions: compsSnap.size,
+            pendingReviews: snap.size
+          });
+        }
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       } catch (error) {
         console.error("Error fetching admin data:", error);
       } finally {
@@ -59,12 +110,65 @@ export default function AdminDashboard() {
       }
     };
 
+<<<<<<< HEAD
     fetchAdminData();
+=======
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        setIsAdmin(false);
+        setLoading(false);
+        return;
+      }
+      
+      // Check hardcoded admin email first
+      if (user.email === "arcadeabhi6@gmail.com") {
+        setIsAdmin(true);
+        fetchAdminData();
+        return;
+      }
+
+      try {
+        const userDoc = await getDoc(doc(db, "users", user.uid)).catch(e => handleFirestoreError(e, OperationType.GET, `users/${user.uid}`));
+        if (userDoc && userDoc.exists() && userDoc.data().role === Role.ADMIN) {
+          setIsAdmin(true);
+          fetchAdminData();
+        } else {
+          setLoading(false);
+        }
+      } catch (error) {
+        setLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
   }, []);
 
   const handleVerify = async (completion: Completion, status: VerificationStatus) => {
     try {
+<<<<<<< HEAD
       await api.updateAdminCompletion(completion.id, status);
+=======
+      const compRef = doc(db, "completions", completion.id);
+      await updateDoc(compRef, {
+        aiVerificationStatus: status,
+        verifiedAt: new Date().toISOString()
+      }).catch(e => handleFirestoreError(e, OperationType.UPDATE, `completions/${completion.id}`));
+
+      if (status === VerificationStatus.VERIFIED) {
+        const challenge = challengesMap[completion.challengeId];
+        const points = challenge?.points || 10;
+        const userRef = doc(db, "users", completion.userId);
+        
+        const updateData = {
+          totalPoints: increment(points),
+          currentStreak: increment(1)
+        };
+
+        await updateDoc(userRef, updateData).catch(e => handleFirestoreError(e, OperationType.UPDATE, `users/${completion.userId}`));
+      }
+
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       setPendingCompletions(prev => prev.filter(c => c.id !== completion.id));
       toast.success(`Submission ${status.toLowerCase()}`);
     } catch (error) {
@@ -74,6 +178,7 @@ export default function AdminDashboard() {
 
   const fetchAdminData = async () => {
     try {
+<<<<<<< HEAD
       const [overview, completions] = await Promise.all([
         api.getAdminOverview(),
         api.getAdminCompletions(),
@@ -85,6 +190,45 @@ export default function AdminDashboard() {
         totalCompletions: overview.completions,
         pendingReviews: comps.filter((c: Completion) => [VerificationStatus.PENDING, VerificationStatus.MANUAL_REVIEW].includes(c.aiVerificationStatus)).length,
       });
+=======
+      // Fetch Pending Completions
+      const q = query(collection(db, "completions"), where("aiVerificationStatus", "in", [VerificationStatus.PENDING, VerificationStatus.MANUAL_REVIEW]));
+      const snap = await getDocs(q).catch(e => handleFirestoreError(e, OperationType.LIST, "completions"));
+      if (snap) {
+        const comps = snap.docs.map(d => ({ id: d.id, ...d.data() } as Completion));
+        setPendingCompletions(comps);
+
+        // Fetch related users and challenges
+        const userIds = Array.from(new Set(comps.map(c => c.userId)));
+        const challengeIds = Array.from(new Set(comps.map(c => c.challengeId)));
+
+        const uMap: Record<string, any> = {};
+        for (const uid of userIds) {
+          const uDoc = await getDoc(doc(db, "users", uid));
+          if (uDoc.exists()) uMap[uid] = uDoc.data();
+        }
+        setUsersMap(uMap);
+
+        const cMap: Record<string, Challenge> = {};
+        const cSnap = await getDocs(collection(db, "challenges"));
+        cSnap.docs.forEach(d => {
+          const c = d.data() as Challenge;
+          cMap[c.challengeId] = c;
+        });
+        setChallengesMap(cMap);
+      }
+
+      const usersSnap = await getDocs(collection(db, "users")).catch(e => handleFirestoreError(e, OperationType.LIST, "users"));
+      const compsSnap = await getDocs(collection(db, "completions")).catch(e => handleFirestoreError(e, OperationType.LIST, "completions"));
+
+      if (usersSnap && compsSnap && snap) {
+        setStats({
+          totalUsers: usersSnap.size,
+          totalCompletions: compsSnap.size,
+          pendingReviews: snap.size
+        });
+      }
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
     } catch (error) {
       console.error("Error fetching admin data:", error);
     } finally {
@@ -173,9 +317,18 @@ export default function AdminDashboard() {
         }
       ];
 
+<<<<<<< HEAD
       for (const challenge of challenges) {
         await api.createChallenge(challenge);
       }
+=======
+      const batch = writeBatch(db);
+      challenges.forEach(c => {
+        const ref = doc(db, "challenges", c.challengeId);
+        batch.set(ref, c);
+      });
+      await batch.commit();
+>>>>>>> 07d88a3f94376a0edfc22f9304ff5f7dd0cf413f
       toast.success("Challenges seeded successfully!");
       fetchAdminData();
     } catch (error) {
